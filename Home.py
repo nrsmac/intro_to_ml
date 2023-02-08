@@ -1,4 +1,5 @@
 import streamlit as st
 
-'# Welcome to Streamlit'
+'# Intro to Machine Learning in Python'
+'Select the appropriate lesson in the sidebar'
 

@@ -1,6 +1,10 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.tree import DecisionTreeClassifier
 
 
 '''
@@ -61,6 +65,48 @@ We can see that there are some clear differences between the two kinds of raisin
 
 ## Prediction
 
+If someone gave us a raisin's measurements but didn't tell us what kind of raisin it was, how could we guess?
+
+In Machine Learning, we create __models__ to predict values given __features__. We can think of a __model__ as an informed guessing machine. 
 """
 
+st.image('./images/model1.png')
+
+"""
+One of the simplest models is a decision tree. We will go into more detail later, but just remember that a model predicts an output given a feature vector.  
+
+I've loaded a simple decision tree odel with our raisin data. Let's see how well it can predict. Fill in the below values to edit the feature vector below. 
+
+Start with these two example feature vectors from the dataset. Does our model classify them correctly?
+"""
+
+labels = {
+    'Kecimen':0,
+    'Besni':1,
+}
+
+col1, col2 = st.columns(2)
+with col1:
+    df.iloc[0]
+with col2:
+    df.iloc[512]
+
+X = df.drop('Class', axis=1)
+y = df.Class.map(labels)
+x = [0.0]*(len(columns))
+col1, col2 = st.columns(2)
+with col1:
+    for i, col in enumerate(columns[:len(columns)//2+1]):
+        value = st.number_input(col, value=df[col].iloc[0])
+        x[i] = value
+with col2:
+    for i, col in enumerate(columns[len(columns)//2+1:]):
+        value = st.number_input(col, value=df[col].iloc[0])
+        x[i+len(columns)//2+1] = value
+
+L = DecisionTreeClassifier()
+L.fit(X, y)
+pred = L.predict(np.array(x).reshape(1,-1))
+pred = {v: k for k, v in labels.items()}[pred[0]]
+f'__Prediction__: {pred}'
 
